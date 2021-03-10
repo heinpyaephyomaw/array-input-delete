@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="node_modules/feather/feather.css">
+    <style>
+        .all_input_parent {
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+        }
+        
+        .value-parent {
+            /* word-break: break-all; */
+            word-wrap: break-word;
+        }
+        
+        .input-value {
+            border: 1px solid #000;
+            padding: 2px 5px;
+            margin-bottom: 10px;
+            position: relative;
+            background-color: rgb(149, 149, 149);
+            color: #fff;
+            border-radius: 50px;
+        }
+        
+        .user-input-value:focus {
+            box-shadow: none;
+        }
+        
+        .value-remove {
+            position: absolute;
+            right: 5px;
+            top: 0px;
+            font-size: 10px;
+            cursor: pointer;
+            color: rgb(255, 0, 0);
+        }
+        
+        #user-content {
+            display: none;
+        }
+        /* specifically hide the arrow on focus */
+        
+        #user-input-value::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-4">
+                <div class="all_input_parent">
+                    <div class="value-parent" id="value-parent">
+                        <!-- <span class="input-value mr-1" id="user-value"><i class="feather-x value-remove"></i><span>Apple</span></span> -->
+                    </div>
+                    <input type="text" list="user-content" class="form-control mt-2 border-0 user-input-value" id="user-input-value">
+                    <datalist id="user-content">
+                        <option value="Chocolate">
+                        <option value="Coconut">
+                        <option value="Mint">
+                        <option value="Strawberry">
+                        <option value="Vanilla">
+                        <option value="Coffee"></option>
+                    </datalist>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="script.js"></script>
+
+
+    <script>
+        let value_parent = document.getElementById("value-parent");
+        let input = document.getElementById("user-input-value");
+        let user_content = document.getElementById("user-content");
+        let all_value = [];
+        let id = 0;
+
+        input.addEventListener("keyup", function(e) {
+            if (e.keyCode == 13) {
+
+                for (let x = 0; x < user_content.children.length; x++) {
+                    let result = user_content.children[x].value;
+                    // console.log(result);
+                    if (input.value == result) {
+                        let input_value = input.value;
+                        input.value = "";
+                        // console.log(input_value);
+
+                        if (input_value) {
+                            if (!all_value.includes(input_value)) {
+                                all_value.push(input_value);
+                                console.log(all_value);
+
+                                $("#value-parent").prepend(`
+                                     <span class="badge badge-secondary badge-pill p-1 position-relative" id="remove-${id}">
+                                        <i class="feather-x value-remove"  onclick="del(${id})"></i>
+                                        <span>${input_value}</span>
+                                     </span>
+                    `);
+                                id++;
+                            }
+
+                        };
+                    }
+                }
+            }
+        });
+
+        function del(id) {
+            $('#remove-' + id).remove();
+            all_value.splice(id, 1);
+        }
+    </script>
+
+
+
+</body>
+
+</html>
